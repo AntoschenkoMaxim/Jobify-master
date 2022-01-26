@@ -39,12 +39,29 @@ const login = async (req, res) => {
 	}
 
 	const token = user.createJWT()
+
 	user.password = undefined
+
 	res.status(StatusCodes.OK).json({ user, token, location: user.location })
 }
 
 const updateUser = async (req, res) => {
-	res.send('update user')
+	const { email, name, lastName, location } = req.body
+	if (!email || !name || !lastName || !location) {
+		throw new BadRequestError('Пожалуйста, заполните все поля!')
+	}
+	const user = await User.findOne({ _id: req.user.userId })
+
+	user.email = email
+	user.name = name
+	user.lastName = lastName
+	user.location = location
+
+	await user.save()
+
+	const token = user.createJWT()
+
+	res.status(StatusCodes.OK).json({ user, token, location: user.location })
 }
 
 export { register, login, updateUser }
