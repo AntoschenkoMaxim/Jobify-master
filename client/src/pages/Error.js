@@ -8,7 +8,7 @@ const Error = () => {
 			<img src={img} alt='not found' />
 			<h3>Ohh! page not found</h3>
 			<p>Страница по вашему запросу не найдена!</p>
-			<Link to='/'>Back</Link>
+			<Link to='/'>Вернуться назад</Link>
 		</div>
 	</Wrapper>
 }
