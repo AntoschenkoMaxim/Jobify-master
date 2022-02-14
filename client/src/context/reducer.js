@@ -23,7 +23,14 @@ import {
 	CREATE_JOB_ERROR,
 
 	GET_JOBS_BEGIN,
-	GET_JOBS_SUCCESS
+	GET_JOBS_SUCCESS,
+
+	SET_EDIT_JOB,
+	DELETE_JOB_BEGIN,
+
+	EDIT_JOB_BEGIN,
+	EDIT_JOB_SUCCESS,
+	EDIT_JOB_ERROR
 
 } from "./actions"
 
@@ -33,7 +40,7 @@ const reducer = (state, action) => {
 			...state,
 			showAlert: true,
 			alertType: 'danger',
-			alertText: 'Please provide all values!',
+			alertText: 'Пожалуйста, заполните все поля!',
 		}
 	}
 	if (action.type === CLEAR_ALERT) {
@@ -126,8 +133,8 @@ const reducer = (state, action) => {
 			position: '',
 			company: '',
 			jobLocation: state.userLocation,
-			jobType: 'full-time',
-			status: 'pending',
+			jobType: 'все время',
+			status: 'добавлено',
 		}
 		return {
 			...state,
@@ -177,6 +184,55 @@ const reducer = (state, action) => {
 			jobs: action.payload.jobs,
 			totalJobs: action.payload.totalJobs,
 			numOfPages: action.payload.numOfPages
+		}
+	}
+
+	if (action.type === SET_EDIT_JOB) {
+		const job = state.jobs.find((job) => job._id === action.payload.id)
+		const { _id, position, company, jobLocation, jobType, status } = job
+		return {
+			...state,
+			isEditing: true,
+			editJobId: _id,
+			position,
+			company,
+			jobLocation,
+			jobType,
+			status,
+		}
+	}
+
+	if (action.type === DELETE_JOB_BEGIN) {
+		return {
+			...state,
+			isLoading: true,
+		}
+	}
+
+	if (action.type === EDIT_JOB_BEGIN) {
+		return {
+			...state,
+			isLoading: true,
+		}
+	}
+
+	if (action.type === EDIT_JOB_SUCCESS) {
+		return {
+			...state,
+			isLoading: false,
+			showAlert: true,
+			alertType: 'success',
+			alertText: 'Вакансия обновлена!'
+		}
+	}
+
+	if (action.type === EDIT_JOB_ERROR) {
+		return {
+			...state,
+			isLoading: false,
+			showAlert: true,
+			alertType: 'danger',
+			alertText: action.payload.msg,
 		}
 	}
 

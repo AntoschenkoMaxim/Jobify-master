@@ -17,7 +17,7 @@ const Navbar = () => {
 				</button>
 				<div>
 					<Logo />
-					<h3 className="logo-text">Личный кабинет</h3>
+					<h3 className="logo-text">Кабинет</h3>
 				</div>
 				<div className="btn-container">
 					<button

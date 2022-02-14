@@ -15,6 +15,7 @@ const Job = ({
 	status,
 }) => {
 	const { setEditJob, deleteJob } = useAppContext()
+
 	let date = moment(createdAt)
 	date = date.format('MMM Do, YYYY')
 	return (
@@ -40,7 +41,7 @@ const Job = ({
 							className='btn edit-btn'
 							onClick={() => setEditJob(_id)}
 						>
-							Редактировать
+							Изменить
 						</Link>
 						<button
 							type='button'

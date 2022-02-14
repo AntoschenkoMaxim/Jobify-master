@@ -59,11 +59,12 @@ const Register = () => {
 	return (<Wrapper className='full-page'>
 		<form className='form' onSubmit={onSubmit}>
 			<Logo />
-			<h3>{values.isMember ? "Login" : "Register"}</h3>
+			<h3>{values.isMember ? "Авторизация" : "Регистрация"}</h3>
 			{showAlert && <Alert />}
 			{/* name input */}
 			{!values.isMember &&
 				< FormRow
+					labelText='имя'
 					type='text'
 					name='name'
 					value={values.name}
@@ -77,19 +78,20 @@ const Register = () => {
 				handleChange={handleChange} />
 
 			<FormRow
+				labelText='пароль'
 				type='password'
 				name='password'
 				value={values.password}
 				handleChange={handleChange} />
 
 			<button type='submit' className='btn btn-block' disabled={isLoading}>
-				Submit
+				Войти
 			</button>
 
 			<p>
 				{values.isMember ? 'Ещё не с нами?' : 'Уже зарегистрированы?'}
 				<button type="button" onClick={toggleMember} className='member-btn'>
-					{values.isMember ? 'Register' : 'Login'}
+					{values.isMember ? 'Зарегистрироваться' : 'Войти'}
 				</button>
 			</p>
 		</form>

@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Register, Landing, Error, ProtectedRoute } from './pages'
-import { AllJobs, Profile, SharedLayout, Stats, AddJob } from './pages/dashboard'
-
+import { AllJobs, Profile, SharedLayout, Stats, AddJob, AddCandidate, AddCourse, AllCandidates, AllCourses } from './pages/dashboard'
 function App() {
   return (
     <BrowserRouter>
@@ -16,7 +15,11 @@ function App() {
           }>
           <Route index element={<Stats />} />
           <Route path='all-jobs' element={<AllJobs />} />
+          <Route path='all-candidates' element={<AllCandidates />} />
+          <Route path='all-courses' element={<AllCourses />} />
           <Route path='add-job' element={<AddJob />} />
+          <Route path='add-candidate' element={<AddCandidate />} />
+          <Route path='add-course' element={<AddCourse />} />
           <Route path='profile' element={<Profile />} />
         </Route>
         <Route path='/register' element={<Register />} />
