@@ -33,7 +33,10 @@ import {
 
 	EDIT_JOB_BEGIN,
 	EDIT_JOB_SUCCESS,
-	EDIT_JOB_ERROR
+	EDIT_JOB_ERROR,
+
+	SHOW_STATS_BEGIN,
+	SHOW_STATS_SUCCESS
 
 } from './actions'
 
@@ -59,13 +62,16 @@ const initialState = {
 	jobLocation: userLocation || '',
 	jobTypeOptions: ['все время', 'пол ставки', 'удаленная', 'интерн'],
 	jobType: 'все время',
-	statusOptions: ['собеседование', 'в обработке', 'добавлено'],
-	status: 'добавлено',
+	statusOptions: ['interview', 'pending', 'declined'],
+	status: 'declined',
 
 	jobs: [],
 	totalJobs: 0,
 	numOfPages: 1,
 	page: 1,
+
+	stats: {},
+	monthlyApplications: []
 }
 
 
@@ -276,6 +282,22 @@ const AppProvider = ({ children }) => {
 		}
 	}
 
+	const showStats = async () => {
+		dispatch({ type: SHOW_STATS_BEGIN })
+		try {
+			const { data } = await authFetch('/jobs/stats')
+			dispatch({
+				type: SHOW_STATS_SUCCESS,
+				payload: {
+					stats: data.defaultStats,
+					monthlyApplications: data.monthlyApplications,
+				},
+			})
+		} catch (error) {
+			//loadoutUser()
+		}
+		clearAlert()
+	}
 
 	return <AppContext.Provider
 		value={{
@@ -292,6 +314,8 @@ const AppProvider = ({ children }) => {
 			setEditJob,
 			deleteJob,
 			editJob,
+			showStats,
+
 		}}>
 		{children}
 	</AppContext.Provider>

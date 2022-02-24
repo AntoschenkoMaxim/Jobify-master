@@ -9,6 +9,9 @@ import Logo from './Logo'
 import Navbar from './Navbar'
 import SearchContainer from './SearchContainer'
 import SmallSidebar from './SmallSidebar'
+import ChartsContainer from './ChartsContainer'
+import StatsContainer from './StatsContainer'
+
 export {
 	Logo,
 	FormRow,
@@ -20,4 +23,6 @@ export {
 	SearchContainer,
 	JobsContainer,
 	Loading,
+	ChartsContainer,
+	StatsContainer,
 }

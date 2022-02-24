@@ -30,7 +30,10 @@ import {
 
 	EDIT_JOB_BEGIN,
 	EDIT_JOB_SUCCESS,
-	EDIT_JOB_ERROR
+	EDIT_JOB_ERROR,
+
+	SHOW_STATS_BEGIN,
+	SHOW_STATS_SUCCESS
 
 } from "./actions"
 
@@ -134,7 +137,7 @@ const reducer = (state, action) => {
 			company: '',
 			jobLocation: state.userLocation,
 			jobType: 'все время',
-			status: 'добавлено',
+			status: 'declined',
 		}
 		return {
 			...state,
@@ -233,6 +236,23 @@ const reducer = (state, action) => {
 			showAlert: true,
 			alertType: 'danger',
 			alertText: action.payload.msg,
+		}
+	}
+
+	if (action.type === SHOW_STATS_BEGIN) {
+		return {
+			...state,
+			isLoading: true,
+			showAlert: false,
+		}
+	}
+
+	if (action.type === SHOW_STATS_SUCCESS) {
+		return {
+			...state,
+			isLoading: false,
+			stats: action.payload.stats,
+			monthlyApplications: action.payload.monthlyApplications,
 		}
 	}
 
