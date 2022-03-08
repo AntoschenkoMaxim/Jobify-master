@@ -34,7 +34,8 @@ import {
 
 	SHOW_STATS_BEGIN,
 	SHOW_STATS_SUCCESS,
-	CLEAR_FILTERS
+	CLEAR_FILTERS,
+	CHANGE_PAGE
 
 } from "./actions"
 
@@ -264,6 +265,21 @@ const reducer = (state, action) => {
 			searchStatus: 'все',
 			searchType: 'все',
 			sort: 'новые',
+		}
+	}
+
+	if (action.type === CHANGE_PAGE) {
+		return {
+			...state,
+			page: action.payload.page,
+		}
+	}
+
+	if (action.type === HANDLE_CHANGE) {
+		return {
+			...state,
+			page: 1,
+			[action.payload.name]: action.payload.value
 		}
 	}
 
