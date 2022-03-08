@@ -33,7 +33,8 @@ import {
 	EDIT_JOB_ERROR,
 
 	SHOW_STATS_BEGIN,
-	SHOW_STATS_SUCCESS
+	SHOW_STATS_SUCCESS,
+	CLEAR_FILTERS
 
 } from "./actions"
 
@@ -253,6 +254,16 @@ const reducer = (state, action) => {
 			isLoading: false,
 			stats: action.payload.stats,
 			monthlyApplications: action.payload.monthlyApplications,
+		}
+	}
+
+	if (action.type === CLEAR_FILTERS) {
+		return {
+			...state,
+			search: '',
+			searchStatus: 'все',
+			searchType: 'все',
+			sort: 'новые',
 		}
 	}
 
