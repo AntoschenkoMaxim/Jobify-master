@@ -6,10 +6,12 @@ import {
 	deleteJob,
 	getAllJobs,
 	updateJob,
-	showStats
+	showStats,
+	getAllJobsWithoutUser
 } from "../controllers/jobsController.js";
 
 router.route('/').post(createJob).get(getAllJobs)
+router.route('/jobs').get(getAllJobsWithoutUser)
 //remember about :id
 router.route('/stats').get(showStats)
 router.route('/:id').delete(deleteJob).patch(updateJob)

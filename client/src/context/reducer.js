@@ -21,6 +21,12 @@ import {
 	CREATE_JOB_BEGIN,
 	CREATE_JOB_SUCCESS,
 	CREATE_JOB_ERROR,
+	CREATE_CANDIDATE_BEGIN,
+	CREATE_CANDIDATE_SUCCESS,
+	CREATE_CANDIDATE_ERROR,
+	CREATE_COURSE_BEGIN,
+	CREATE_COURSE_SUCCESS,
+	CREATE_COURSE_ERROR,
 
 	GET_JOBS_BEGIN,
 	GET_JOBS_SUCCESS,
@@ -135,10 +141,17 @@ const reducer = (state, action) => {
 		const initialState = {
 			isEditing: false,
 			editJobId: '',
+			name: '',
 			position: '',
 			company: '',
 			jobLocation: state.userLocation,
+			candidateLocation: state.userLocation,
+			courseLocation: state.userLocation,
 			jobType: 'все время',
+			candidateType: 'Постоянная',
+			courseType: 'Удаленная',
+			experience: 'отсутствует',
+			duration: '3 месяца',
 			status: 'declined',
 		}
 		return {
@@ -165,6 +178,60 @@ const reducer = (state, action) => {
 	}
 
 	if (action.type === CREATE_JOB_ERROR) {
+		return {
+			...state,
+			isLoading: false,
+			showAlert: true,
+			alertType: 'danger',
+			alertText: action.payload.msg,
+		}
+	}
+
+	if (action.type === CREATE_CANDIDATE_BEGIN) {
+		return {
+			...state,
+			isLoading: true
+		}
+	}
+
+	if (action.type === CREATE_CANDIDATE_SUCCESS) {
+		return {
+			...state,
+			isLoading: false,
+			showAlert: true,
+			alertType: 'success',
+			alertText: 'Кандидат создан!',
+		}
+	}
+
+	if (action.type === CREATE_CANDIDATE_ERROR) {
+		return {
+			...state,
+			isLoading: false,
+			showAlert: true,
+			alertType: 'danger',
+			alertText: action.payload.msg,
+		}
+	}
+
+	if (action.type === CREATE_COURSE_BEGIN) {
+		return {
+			...state,
+			isLoading: true
+		}
+	}
+
+	if (action.type === CREATE_COURSE_SUCCESS) {
+		return {
+			...state,
+			isLoading: false,
+			showAlert: true,
+			alertType: 'success',
+			alertText: 'Курс создан!',
+		}
+	}
+
+	if (action.type === CREATE_COURSE_ERROR) {
 		return {
 			...state,
 			isLoading: false,

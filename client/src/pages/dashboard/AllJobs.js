@@ -1,9 +1,9 @@
-import { JobsContainer, SearchContainer } from "../../components"
+import { JobsContainerWithoutUser, SearchContainerJob } from "../../components"
 
 const AllJobs = () => {
 	return (<>
-		<SearchContainer />
-		<JobsContainer />
+		<SearchContainerJob />
+		<JobsContainerWithoutUser />
 	</>
 	)
 }

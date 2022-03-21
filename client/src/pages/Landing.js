@@ -25,6 +25,7 @@ const Landing = () => {
 					<Link to="/register" className='btn btn-hero'>Войти</Link>
 				</div>
 				<img src={main} alt='search job' className='img main-img' />
+
 			</div>
 		</Wrapper>
 	)

@@ -10,52 +10,58 @@ import { VscEmptyWindow } from 'react-icons/vsc'
 const links = [
 	{
 		id: 1,
-		text: 'статистика',
+		text: 'Все вакансии',
 		path: '/',
-		icon: <VscGraph />
+		icon: <VscPerson />
 	},
 	{
 		id: 2,
-		text: 'вакансии',
-		path: 'all-jobs',
-		icon: <VscBriefcase />
+		text: 'статистика',
+		path: 'stats',
+		icon: <VscGraph />
 	},
 	{
 		id: 3,
+		text: 'Мои вакансии',
+		path: 'all-jobs-user',
+		icon: <VscBriefcase />
+	},
+	{
+		id: 4,
 		text: 'добавить',
 		path: 'add-job',
 		icon: <VscNewFile />
 	},
 	{
-		id: 4,
+		id: 5,
 		text: 'кандидаты',
 		path: 'all-candidates',
 		icon: <VscOrganization />
 	},
 	{
-		id: 5,
+		id: 6,
 		text: 'добавить',
 		path: 'add-candidate',
 		icon: <VscPersonAdd />
 	},
 	{
-		id: 6,
+		id: 7,
 		text: 'курсы',
 		path: 'all-courses',
 		icon: <VscFolderLibrary />
 	},
 	{
-		id: 7,
+		id: 8,
 		text: 'добавить',
 		path: 'add-course',
 		icon: <VscEmptyWindow />
 	},
 	{
-		id: 8,
+		id: 9,
 		text: 'профиль',
 		path: 'profile',
 		icon: <VscPerson />
-	}
+	},
 ]
 
 export default links

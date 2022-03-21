@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Register, Landing, Error, ProtectedRoute } from './pages'
-import { AllJobs, Profile, SharedLayout, Stats, AddJob, AddCandidate, AddCourse, AllCandidates, AllCourses } from './pages/dashboard'
+import { AllJobs, AllJobsUser, Profile, SharedLayout, Stats, AddJob, AddCandidate, AddCourse, AllCandidates, AllCourses } from './pages/dashboard'
 function App() {
   return (
     <BrowserRouter>
@@ -13,8 +13,9 @@ function App() {
               <SharedLayout />
             </ProtectedRoute>
           }>
-          <Route index element={<Stats />} />
-          <Route path='all-jobs' element={<AllJobs />} />
+          <Route index element={<AllJobs />} />
+          <Route path='stats' element={<Stats />} />
+          <Route path='all-jobs-user' element={<AllJobsUser />} />
           <Route path='all-candidates' element={<AllCandidates />} />
           <Route path='all-courses' element={<AllCourses />} />
           <Route path='add-job' element={<AddJob />} />

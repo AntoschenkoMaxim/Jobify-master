@@ -2,8 +2,61 @@ import Job from '../models/Job.js'
 import { StatusCodes } from 'http-status-codes'
 import { BadRequestError, NotFoundError, UnAuthenticatedError } from '../errors/index.js'
 import checkPermissions from '../utils/checkPermissions.js'
-import mongoose from 'mongoose'
 import moment from 'moment'
+
+import { Markup, Telegraf } from 'telegraf'
+import dotenv from 'dotenv'
+dotenv.config()
+import commands from '../bot/commandsForBot.js'
+import text from '../bot/textForBot.js'
+
+const bot = new Telegraf(process.env.BOT_TOKEN)
+bot.start((ctx) => ctx.reply(`Приветствую вас, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'дорогой незнакомец'}!`))
+bot.help((ctx) => ctx.reply(commands))
+bot.command('info', async (ctx) => {
+	try {
+		await ctx.replyWithHTML('<b>Информация</b>', Markup.inlineKeyboard(
+			[
+				[Markup.button.callback('Читать', 'btn_follow')]
+			]
+		))
+	} catch (e) {
+		console.error(e)
+	}
+})
+
+bot.command('jobs', async (ctx) => {
+	try {
+		await ctx.replyWithHTML('<b>Обновления вакансий</b>', Markup.inlineKeyboard(
+			[
+				[Markup.button.callback('Подписаться', 'btn_follow')]
+			]
+		))
+	} catch (e) {
+		console.error(e)
+	}
+})
+
+function addActionBot(name, src, text) {
+	bot.action(name, async (ctx) => {
+		try {
+			await ctx.answerCbQuery()
+			if (src !== false) {
+				await ctx.replyWithPhoto({
+					source: src
+				})
+			}
+			await ctx.replyWithHTML(text, {
+				disable_web_page_preview: true
+			})
+		} catch (e) {
+			console.error(e)
+		}
+	})
+}
+
+addActionBot('btn_follow', './img/logo.jpg', text)
+bot.launch()
 
 const createJob = async (req, res) => {
 	const { position, company } = req.body
@@ -14,7 +67,19 @@ const createJob = async (req, res) => {
 	req.body.createdBy = req.user.userId
 	const job = await Job.create(req.body)
 	res.status(StatusCodes.CREATED).json({ job })
+
+	const formatData = `	
+		Вышла новая вакансия:
+		ID: ${job.id}
+		Компания: ${job.company},
+		Должность: ${job.position},
+		Статус: ${job.status},
+		Местонахождение: ${job.jobLocation}
+		Занятость: ${job.jobType}
+`
+	bot.telegram.sendMessage(-1001767776100, `${formatData}`);
 }
+
 
 const getAllJobs = async (req, res) => {
 	const { search, status, jobType, sort } = req.query
@@ -22,7 +87,58 @@ const getAllJobs = async (req, res) => {
 	const queryObject = {
 		createdBy: req.user.userId,
 	}
-	// поиск по статусу, типу вакансии, 
+	// поиск по статусу, типу вакансии, поисковой строке
+	if (status && status !== 'все') {
+		queryObject.status = status
+	}
+
+	if (jobType && jobType !== 'все') {
+		queryObject.jobType = jobType
+	}
+
+	if (search) {
+		queryObject.position = { $regex: search, $options: 'i' }
+	}
+
+	let result = Job.find(queryObject)
+
+	if (sort === 'новые') {
+		result = result.sort('-createdAt')
+	}
+
+	if (sort === 'старые') {
+		result = result.sort('createdAt')
+	}
+
+	if (sort === 'a-z') {
+		result = result.sort('position')
+	}
+
+	if (sort === 'z-a') {
+		result = result.sort('-position')
+	}
+	// pagination
+	const page = Number(req.query.page) || 1
+	const limit = Number(req.query.limit) || 10
+	const skip = (page - 1) * limit
+	result = result.skip(skip).limit(limit)
+	//125
+	// 10 10 10 10 10 10 10 10 10 10 10 10 5
+
+	const jobs = await result
+	const totalJobs = await Job.countDocuments(queryObject)
+	const numOfPages = Math.ceil(totalJobs / limit)
+
+	res.status(StatusCodes.OK).json({ jobs, totalJobs, numOfPages })
+}
+
+const getAllJobsWithoutUser = async (req, res) => {
+	const { search, status, jobType, sort } = req.query
+
+	const queryObject = {
+
+	}
+	// поиск по статусу, типу вакансии, поисковой строке
 	if (status && status !== 'все') {
 		queryObject.status = status
 	}
@@ -106,11 +222,22 @@ const deleteJob = async (req, res) => {
 
 	await job.remove()
 	res.status(StatusCodes.OK).json({ msg: 'Успешно! Вакансия удалена' })
+
+	const formatData = `	
+		Удалена следующая вакансия:
+		ID: ${job.id}
+		Компания: ${job.company},
+		Должность: ${job.position},
+		Статус: ${job.status},
+		Местонахождение: ${job.jobLocation}
+		Занятость: ${job.jobType}
+`
+	bot.telegram.sendMessage(1953336962, `${formatData}`);
 }
 
 const showStats = async (req, res) => {
 	let stats = await Job.aggregate([
-		{ $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
+		// { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
 		//получаем все наши работы, созданные пользователем по id
 		{ $group: { _id: '$status', count: { $sum: 1 } } },
 		//агрегируем по статусу и получаем количество
@@ -131,7 +258,7 @@ const showStats = async (req, res) => {
 	}
 
 	let monthlyApplications = await Job.aggregate([
-		{ $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
+		// { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
 		{
 			$group: {
 				_id: {
@@ -155,6 +282,8 @@ const showStats = async (req, res) => {
 	}).reverse()
 
 	res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications })
+
 }
 
-export { createJob, deleteJob, getAllJobs, updateJob, showStats }
+
+export { createJob, deleteJob, getAllJobs, getAllJobsWithoutUser, updateJob, showStats }

@@ -25,6 +25,14 @@ import {
 	CREATE_JOB_SUCCESS,
 	CREATE_JOB_ERROR,
 
+	CREATE_CANDIDATE_BEGIN,
+	CREATE_CANDIDATE_SUCCESS,
+	CREATE_CANDIDATE_ERROR,
+
+	CREATE_COURSE_BEGIN,
+	CREATE_COURSE_SUCCESS,
+	CREATE_COURSE_ERROR,
+
 	GET_JOBS_BEGIN,
 	GET_JOBS_SUCCESS,
 
@@ -62,8 +70,19 @@ const initialState = {
 	position: '',
 	company: '',
 	jobLocation: userLocation || '',
+	candidateLocation: userLocation || '',
+	courseLocation: userLocation || '',
 	jobTypeOptions: ['все время', 'пол ставки', 'удаленная', 'интерн'],
 	jobType: 'все время',
+	candidateTypeOptions: ['Постоянная', 'Неполная', 'удаленная', 'интерн'],
+	candidateType: 'Постоянная',
+	courseTypeOptions: ['Постоянная', 'Неполная', 'удаленная', 'интерн'],
+	courseType: 'Удаленная',
+
+	experienceOptions: ['отсутствует', 'от 1 до 3', '3 и более'],
+	experience: 'отсутствует',
+	durationOptions: ['1 месяц', '2 месяца', '3 месяца', '4-6 месяцев', '6 и более'],
+	duration: '3 месяца',
 	statusOptions: ['interview', 'pending', 'declined'],
 	status: 'declined',
 
@@ -75,8 +94,13 @@ const initialState = {
 
 	jobs: [],
 	totalJobs: 0,
-	numOfPages: 1,
-	page: 1,
+	numOfPagesJobs: 1,
+	pageJobs: 1,
+
+	candidates: [],
+	totalCandidates: 0,
+	numOfPagesCandidates: 1,
+	pageCandidates: 1,
 
 	stats: {},
 	monthlyApplications: []
@@ -224,10 +248,86 @@ const AppProvider = ({ children }) => {
 		clearAlert()
 	}
 
+	const createCandidate = async () => {
+		dispatch({ type: CREATE_CANDIDATE_BEGIN })
+		try {
+			const { name, position, experience, candidateType, candidateLocation } = state
+			await authFetch.post('/candidates', {
+				name,
+				position,
+				experience,
+				candidateType,
+				candidateLocation,
+			})
+			dispatch({ type: CREATE_CANDIDATE_SUCCESS })
+			dispatch({ type: CLEAR_VALUES })
+		} catch (error) {
+			if (error.response.status === 401) return
+			dispatch({
+				type: CREATE_CANDIDATE_ERROR,
+				payload: { msg: error.response.data.msg }
+			})
+		}
+		clearAlert()
+	}
+
+	const createCourse = async () => {
+		dispatch({ type: CREATE_COURSE_BEGIN })
+		try {
+			const { company, position, duration, courseType, courseLocation } = state
+			await authFetch.post('/courses', {
+				company,
+				position,
+				duration,
+				courseType,
+				courseLocation,
+			})
+			dispatch({ type: CREATE_COURSE_SUCCESS })
+			dispatch({ type: CLEAR_VALUES })
+		} catch (error) {
+			if (error.response.status === 401) return
+			dispatch({
+				type: CREATE_COURSE_ERROR,
+				payload: { msg: error.response.data.msg }
+			})
+		}
+		clearAlert()
+	}
+
 	const getJobs = async () => {
 
 		const { page, search, searchStatus, searchType, sort } = state
 		let url = `/jobs?page=${page}&status=${searchStatus}&jobType=${searchType}&sort=${sort}`
+		//фильтруем по статусу, типу, сортировке по дате и от а до я
+
+		if (search) {
+			url = url + `&search=${search}`
+		}
+
+		dispatch({ type: GET_JOBS_BEGIN })
+		try {
+			const { data } = await authFetch(url)
+			const { jobs, totalJobs, numOfPages } = data
+			dispatch({
+				type: GET_JOBS_SUCCESS,
+				payload: {
+					jobs,
+					totalJobs,
+					numOfPages
+				},
+			})
+		} catch (error) {
+			console.log(error.response)
+			// logoutUser()
+		}
+		clearAlert()
+	}
+
+	const getAllJobs = async () => {
+
+		const { page, search, searchStatus, searchType, sort } = state
+		let url = `/jobs/jobs?page=${page}&status=${searchStatus}&jobType=${searchType}&sort=${sort}`
+		//фильтруем по статусу, типу, сортировке по дате и от а до я
 
 		if (search) {
 			url = url + `&search=${search}`
@@ -332,7 +432,10 @@ const AppProvider = ({ children }) => {
 			handleChange,
 			clearValues,
 			createJob,
+			createCandidate,
+			createCourse,
 			getJobs,
+			getAllJobs,
 			setEditJob,
 			deleteJob,
 			editJob,

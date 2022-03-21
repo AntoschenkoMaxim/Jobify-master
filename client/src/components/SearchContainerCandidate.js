@@ -2,7 +2,7 @@ import { FormRow, FormRowSelect } from '.'
 import { useAppContext } from '../context/appContext'
 import Wrapper from '../assets/wrappers/SearchContainer'
 
-const SearchContainer = () => {
+const SearchContainerCandidate = () => {
 	const {
 		isLoading,
 		search,
@@ -79,4 +79,4 @@ const SearchContainer = () => {
 	)
 }
 
-export default SearchContainer
+export default SearchContainerCandidate

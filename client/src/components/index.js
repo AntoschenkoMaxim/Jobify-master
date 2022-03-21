@@ -4,10 +4,12 @@ import BigSidebar from './BigSidebar'
 import FormRow from './FormRow'
 import FormRowSelect from './FormRowSelect'
 import JobsContainer from './JobsContainer'
+import JobsContainerWithoutUser from './JobsContainerWithoutUser'
 import Loading from './Loading'
 import Logo from './Logo'
 import Navbar from './Navbar'
-import SearchContainer from './SearchContainer'
+import SearchContainerJob from './SearchContainerJob'
+import SearchContainerCandidate from './SearchContainerCandidate'
 import SmallSidebar from './SmallSidebar'
 import ChartsContainer from './ChartsContainer'
 import StatsContainer from './StatsContainer'
@@ -20,8 +22,10 @@ export {
 	BigSidebar,
 	SmallSidebar,
 	FormRowSelect,
-	SearchContainer,
+	SearchContainerJob,
+	SearchContainerCandidate,
 	JobsContainer,
+	JobsContainerWithoutUser,
 	Loading,
 	ChartsContainer,
 	StatsContainer,

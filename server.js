@@ -12,7 +12,8 @@ import connectDB from './db/connect.js'
 //routers
 import authRouter from './routes/authRoutes.js'
 import jobsRouter from './routes/jobsRoutes.js'
-
+import candidatesRouter from './routes/candidatesRoutes.js'
+import coursesRouter from './routes/coursesRoutes.js'
 //middleware
 import notFoundMiddleware from './middleware/not-found.js'
 import errorHandlerMiddleware from './middleware/error-handler.js'
@@ -33,6 +34,8 @@ app.get('/api/v1', (req, res) => {
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/jobs', authenticateUser, jobsRouter)
+app.use('/api/v1/candidates', authenticateUser, candidatesRouter)
+app.use('/api/v1/courses', authenticateUser, coursesRouter)
 
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
