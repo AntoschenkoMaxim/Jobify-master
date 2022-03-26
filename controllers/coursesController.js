@@ -29,8 +29,8 @@ const createCourse = async (req, res) => {
 		Занятость: ${course.courseType},
 		Местонахождение: ${course.courseLocation}
 `
-	botCourses.telegram.sendMessage(process.env.CHAT_COURSES_ID, `${formatData}`);
-	botCourses.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
+	await botCourses.telegram.sendMessage(process.env.CHAT_COURSES_ID, `${formatData}`);
+	await botCourses.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
 }
 
 const getAllCourses = async (req, res) => {
@@ -183,8 +183,8 @@ const deleteCourse = async (req, res) => {
 		Местонахождение: ${course.courseLocation}
 		Отрасль: ${course.courseType}
 `
-	botCourses.telegram.sendMessage(process.env.CHAT_COURSES_ID, `${formatData}`);
-	botCourses.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
+	await botCourses.telegram.sendMessage(process.env.CHAT_COURSES_ID, `${formatData}`);
+	await botCourses.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
 }
 
 const showStats = async (req, res) => {

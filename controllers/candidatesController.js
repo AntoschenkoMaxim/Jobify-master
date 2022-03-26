@@ -29,8 +29,8 @@ const createCandidate = async (req, res) => {
 		Занятость: ${candidate.candidateType},
 		Местонахождение: ${candidate.candidateLocation}
 `
-	botCandidates.telegram.sendMessage(process.env.CHAT_CANDIDATES_ID, `${formatData}`);
-	botCandidates.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
+	await botCandidates.telegram.sendMessage(process.env.CHAT_CANDIDATES_ID, `${formatData}`);
+	await botCandidates.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
 }
 
 
@@ -183,8 +183,8 @@ const deleteCandidate = async (req, res) => {
 		Отрасль: ${candidate.candidateType},
 		Местонахождение: ${candidate.candidateLocation}
 `
-	botCandidates.telegram.sendMessage(process.env.CHAT_CANDIDATES_ID, `${formatData}`);
-	botCandidates.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
+	await botCandidates.telegram.sendMessage(process.env.CHAT_CANDIDATES_ID, `${formatData}`);
+	await botCandidates.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
 }
 
 const showStats = async (req, res) => {

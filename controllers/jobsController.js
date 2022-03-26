@@ -79,8 +79,8 @@ const createJob = async (req, res) => {
 		Местонахождение: ${job.jobLocation}
 		Занятость: ${job.jobType}
 `
-	botJobs.telegram.sendMessage(process.env.CHAT_JOBS_ID, `${formatData}`);
-	botJobs.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
+	await botJobs.telegram.sendMessage(process.env.CHAT_JOBS_ID, `${formatData}`);
+	await botJobs.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
 }
 
 
@@ -234,8 +234,8 @@ const deleteJob = async (req, res) => {
 		Местонахождение: ${job.jobLocation}
 		Занятость: ${job.jobType}
 `
-	botJobs.telegram.sendMessage(process.env.CHAT_JOBS_ID, `${formatData}`);
-	botJobs.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
+	await botJobs.telegram.sendMessage(process.env.CHAT_JOBS_ID, `${formatData}`);
+	await botJobs.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
 }
 
 const showStats = async (req, res) => {
