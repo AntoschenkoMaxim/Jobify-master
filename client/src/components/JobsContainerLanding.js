@@ -21,6 +21,7 @@ const JobsContainerLanding = () => {
 
 	useEffect(() => {
 		getAllJobsLanding()
+		// eslint-disable-next-line
 	}, [page, search, searchStatus, searchType, sort])
 
 	if (isLoading) {

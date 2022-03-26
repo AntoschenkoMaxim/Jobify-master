@@ -21,6 +21,7 @@ const CoursesContainerLanding = () => {
 
 	useEffect(() => {
 		getAllCoursesLanding()
+		// eslint-disable-next-line
 	}, [pageCourses, search, searchDuration, searchType, sort])
 
 	if (isLoading) {

@@ -32,7 +32,7 @@ const AllCandidate = ({
 					<JobInfo icon={<FaLocationArrow />} text={candidateLocation} />
 					<JobInfo icon={<FaCalendarAlt />} text={date} />
 					<JobInfo icon={<FaBriefcase />} text={candidateType} />
-					<div className={`experience ${experience}`}>{experience}</div>
+					<div className='experience candidate'>{experience}</div>
 				</div>
 				<footer>
 					<div className='actions'>

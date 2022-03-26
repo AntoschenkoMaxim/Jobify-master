@@ -76,7 +76,7 @@ const Wrapper = styled.article`
     text-transform: capitalize;
     letter-spacing: var(--letterSpacing);
     text-align: center;
-    width: 100px;
+    width: 120px;
     height: 30px;
   }
   footer {

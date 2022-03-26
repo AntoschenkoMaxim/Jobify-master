@@ -27,6 +27,11 @@ const Landing = () => {
 				</div>
 				<img src={main} alt='search job' className='img main-img' />
 			</div>
+			<div className='container'>
+				<h1>
+					Вакансии:
+				</h1>
+			</div>
 
 			<div className='container'>
 				<div>
@@ -35,11 +40,21 @@ const Landing = () => {
 			</div>
 
 			<div className='container'>
+				<h1>
+					Курсы:
+				</h1>
+			</div>
+			<div className='container'>
 				<div >
 					<AllCoursesLanding />
 				</div>
 			</div>
 
+			<div className='container'>
+				<h1>
+					Кандидаты:
+				</h1>
+			</div>
 			<div className='container '>
 				<div >
 					<AllCandidatesLanding />

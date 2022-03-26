@@ -21,6 +21,7 @@ const CoursesContainerWithoutUser = () => {
 
 	useEffect(() => {
 		getAllCourses()
+		// eslint-disable-next-line
 	}, [pageCourses, search, searchDuration, searchType, sort])
 
 	if (isLoading) {

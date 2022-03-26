@@ -32,7 +32,7 @@ const Course = ({
 					<CourseInfo icon={<FaLocationArrow />} text={courseLocation} />
 					<CourseInfo icon={<FaCalendarAlt />} text={date} />
 					<CourseInfo icon={<FaBriefcase />} text={courseType} />
-					<div className={`duration ${duration}`}>{duration}</div>
+					<div className='duration course'>{duration}</div>
 				</div>
 				<footer>
 					<div className='actions'>
@@ -53,7 +53,7 @@ const Course = ({
 					</div>
 				</footer>
 			</div>
-		</Wrapper>
+		</Wrapper >
 	)
 }
 

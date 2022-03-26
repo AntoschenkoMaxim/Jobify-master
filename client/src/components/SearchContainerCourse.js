@@ -29,7 +29,7 @@ const SearchContainerCourse = () => {
 	return (
 		<Wrapper>
 			<form className='form'>
-				<h4> Курсы </h4>
+				<h4> Поиск </h4>
 				{/* позиционирование строки поиска */}
 				<div className='form-center'>
 					{/* строка поиска */}

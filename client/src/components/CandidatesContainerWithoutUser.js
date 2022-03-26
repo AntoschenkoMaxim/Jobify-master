@@ -21,6 +21,7 @@ const CandidatesContainer = () => {
 
 	useEffect(() => {
 		getAllCandidates()
+		// eslint-disable-next-line
 	}, [pageCandidates, search, searchExperience, searchType, sort])
 
 	if (isLoading) {

@@ -32,7 +32,7 @@ const AllCourseLanding = ({
 					<JobInfo icon={<FaLocationArrow />} text={courseLocation} />
 					<JobInfo icon={<FaCalendarAlt />} text={date} />
 					<JobInfo icon={<FaBriefcase />} text={courseType} />
-					<div className={`duration ${duration}`}>{duration}</div>
+					<div className='duration course'>{duration}</div>
 				</div>
 				<footer>
 					<div className='actions'>
