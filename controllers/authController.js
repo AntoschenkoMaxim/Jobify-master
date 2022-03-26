@@ -98,7 +98,10 @@ const updateUser = async (req, res) => {
 		from: 'jurusski@gmail.com',
 		to: user.email,
 		subject: 'Jobify!',
-		text: `Приветствую вас, ${name} ${lastName}! Вы успешно изменили свой профиль.`
+		text: `Приветствую вас, ${name} ${lastName}! 
+		Вы успешно изменили свой профиль. 
+		Ваше местоположение: ${location}. 
+		Email: ${email}.`
 	}
 
 	transporter.sendMail(mailOptions, function (error, info) {

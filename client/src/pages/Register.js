@@ -43,7 +43,7 @@ const Register = () => {
 			setupUser({
 				currentUser,
 				endPoint: 'register',
-				alertText: 'Вы зарегистрированы!'
+				alertText: 'Вы зарегистрированы! Сообщение отправлено на почту!'
 			})
 		}
 	}
