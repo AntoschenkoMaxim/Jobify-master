@@ -5,6 +5,12 @@ import checkPermissions from '../utils/checkPermissions.js'
 import mongoose from 'mongoose'
 import moment from 'moment'
 
+import { Markup, Telegraf } from 'telegraf'
+import dotenv from 'dotenv'
+dotenv.config()
+
+const botCandidates = new Telegraf(process.env.BOT_TOKEN)
+
 const createCandidate = async (req, res) => {
 	const { position, name } = req.body
 
@@ -14,7 +20,19 @@ const createCandidate = async (req, res) => {
 	req.body.createdBy = req.user.userId
 	const candidate = await Candidate.create(req.body)
 	res.status(StatusCodes.CREATED).json({ candidate })
+
+	const formatData = `	
+		Добавлен новый кандидат:👇
+		Имя: ${candidate.name},
+		Должность: ${candidate.position},
+		Опыт работы: ${candidate.experience},
+		Занятость: ${candidate.candidateType},
+		Местонахождение: ${candidate.candidateLocation}
+`
+	botCandidates.telegram.sendMessage(process.env.CHAT_CANDIDATES_ID, `${formatData}`);
+	botCandidates.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
 }
+
 
 const getAllCandidates = async (req, res) => {
 	const { search, experience, candidateType, sort } = req.query
@@ -53,18 +71,18 @@ const getAllCandidates = async (req, res) => {
 		result = result.sort('-position')
 	}
 	// pagination
-	const page = Number(req.query.page) || 1
+	const pageCandidates = Number(req.query.page) || 1
 	const limit = Number(req.query.limit) || 10
-	const skip = (page - 1) * limit
+	const skip = (pageCandidates - 1) * limit
 	result = result.skip(skip).limit(limit)
 	//125
 	// 10 10 10 10 10 10 10 10 10 10 10 10 5
 
 	const candidates = await result
 	const totalCandidates = await Candidate.countDocuments(queryObject)
-	const numOfPages = Math.ceil(totalCandidates / limit)
+	const numOfPagesCandidates = Math.ceil(totalCandidates / limit)
 
-	res.status(StatusCodes.OK).json({ candidates, totalCandidates, numOfPages })
+	res.status(StatusCodes.OK).json({ candidates, totalCandidates, numOfPagesCandidates })
 }
 
 const getAllCandidatesWithoutUser = async (req, res) => {
@@ -103,18 +121,18 @@ const getAllCandidatesWithoutUser = async (req, res) => {
 		result = result.sort('-position')
 	}
 	// pagination
-	const page = Number(req.query.page) || 1
+	const pageCandidates = Number(req.query.page) || 1
 	const limit = Number(req.query.limit) || 10
-	const skip = (page - 1) * limit
+	const skip = (pageCandidates - 1) * limit
 	result = result.skip(skip).limit(limit)
 	//125
 	// 10 10 10 10 10 10 10 10 10 10 10 10 5
 
 	const candidates = await result
 	const totalCandidates = await Candidate.countDocuments(queryObject)
-	const numOfPages = Math.ceil(totalCandidates / limit)
+	const numOfPagesCandidates = Math.ceil(totalCandidates / limit)
 
-	res.status(StatusCodes.OK).json({ candidates, totalCandidates, numOfPages })
+	res.status(StatusCodes.OK).json({ candidates, totalCandidates, numOfPagesCandidates })
 }
 
 const updateCandidate = async (req, res) => {
@@ -149,13 +167,24 @@ const deleteCandidate = async (req, res) => {
 	const candidate = await Candidate.findOne({ _id: candidateId })
 
 	if (!candidate) {
-		throw new NotFoundError(`No job with id: ${candidateId}`)
+		throw new NotFoundError(`No candidate with id: ${candidateId}`)
 	}
 
 	checkPermissions(req.user, candidate.createdBy)
 
 	await candidate.remove()
 	res.status(StatusCodes.OK).json({ msg: 'Успешно! Вакансия удалена' })
+
+	const formatData = `	
+		Удален следующий кандидат:👇
+		Имя: ${candidate.name},
+		Должность: ${candidate.position},
+		Опыт работы: ${candidate.experience},
+		Отрасль: ${candidate.candidateType},
+		Местонахождение: ${candidate.candidateLocation}
+`
+	botCandidates.telegram.sendMessage(process.env.CHAT_CANDIDATES_ID, `${formatData}`);
+	botCandidates.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
 }
 
 const showStats = async (req, res) => {

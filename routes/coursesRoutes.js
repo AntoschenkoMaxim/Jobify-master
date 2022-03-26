@@ -11,7 +11,7 @@ import {
 } from "../controllers/coursesController.js";
 
 router.route('/').post(createCourse).get(getAllCourses)
-router.route('/candidates').get(getAllCoursesWithoutUser)
+router.route('/courses').get(getAllCoursesWithoutUser)
 //remember about :id
 router.route('/stats').get(showStats)
 router.route('/:id').delete(deleteCourse).patch(updateCourse)

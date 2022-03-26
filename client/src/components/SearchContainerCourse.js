@@ -2,16 +2,16 @@ import { FormRow, FormRowSelect } from '.'
 import { useAppContext } from '../context/appContext'
 import Wrapper from '../assets/wrappers/SearchContainer'
 
-const SearchContainerCandidate = () => {
+const SearchContainerCourse = () => {
 	const {
 		isLoading,
 		search,
-		searchExperience,
+		searchDuration,
 		searchType,
 		sort,
 		sortOptions,
-		experienceOptions,
-		candidateTypeOptions,
+		durationOptions,
+		courseTypeOptions,
 		handleChange,
 		clearFilters
 	} = useAppContext()
@@ -29,7 +29,7 @@ const SearchContainerCandidate = () => {
 	return (
 		<Wrapper>
 			<form className='form'>
-				<h4> Кандидаты </h4>
+				<h4> Курсы </h4>
 				{/* позиционирование строки поиска */}
 				<div className='form-center'>
 					{/* строка поиска */}
@@ -43,11 +43,11 @@ const SearchContainerCandidate = () => {
 					</FormRow>
 					{/* выбор поиска по статусу */}
 					<FormRowSelect
-						labelText='Опыт работы'
-						name='searchExperience'
-						value={searchExperience}
+						labelText='Продолжительность'
+						name='searchDuration'
+						value={searchDuration}
 						handleChange={handleSearch}
-						list={['все', ...experienceOptions]}
+						list={['все', ...durationOptions]}
 					>
 					</FormRowSelect>
 					{/* выбор поиска по типу */}
@@ -56,7 +56,7 @@ const SearchContainerCandidate = () => {
 						name='searchType'
 						value={searchType}
 						handleChange={handleSearch}
-						list={['все', ...candidateTypeOptions]}
+						list={['все', ...courseTypeOptions]}
 					></FormRowSelect>
 					{/* сортировка */}
 					<FormRowSelect
@@ -79,4 +79,4 @@ const SearchContainerCandidate = () => {
 	)
 }
 
-export default SearchContainerCandidate
+export default SearchContainerCourse

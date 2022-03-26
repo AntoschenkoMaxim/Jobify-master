@@ -1,5 +1,11 @@
+import { CandidatesContainerWithoutUser, SearchContainerCandidate } from "../../components"
+
 const AllCandidates = () => {
-	return <h1> AllCandidates Page </h1>
+	return (<>
+		<SearchContainerCandidate />
+		<CandidatesContainerWithoutUser />
+	</>
+	)
 }
 
 export default AllCandidates

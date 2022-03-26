@@ -5,7 +5,7 @@ import { useAppContext } from '../context/appContext'
 import Wrapper from '../assets/wrappers/Job'
 import JobInfo from './JobInfo'
 
-const AllJob = ({
+const AllJobLanding = ({
 	_id,
 	position,
 	company,
@@ -37,11 +37,11 @@ const AllJob = ({
 				<footer>
 					<div className='actions'>
 						<Link
-							to='/stats'
+							to='/register'
 							className='btn edit-btn'
 							onClick={() => showStats()}
 						>
-							<span>Статистика</span>
+							<span>Подробнее</span>
 						</Link>
 					</div>
 				</footer>
@@ -50,4 +50,4 @@ const AllJob = ({
 	)
 }
 
-export default AllJob
+export default AllJobLanding

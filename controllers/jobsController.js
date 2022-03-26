@@ -10,12 +10,12 @@ dotenv.config()
 import commands from '../bot/commandsForBot.js'
 import text from '../bot/textForBot.js'
 
-const bot = new Telegraf(process.env.BOT_TOKEN)
-bot.start((ctx) => ctx.reply(`Приветствую вас, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'дорогой незнакомец'}!`))
-bot.help((ctx) => ctx.reply(commands))
-bot.command('info', async (ctx) => {
+const botJobs = new Telegraf(process.env.BOT_TOKEN)
+botJobs.start((ctx) => ctx.reply(`Приветствую вас, ${ctx.message.from.first_name ? ctx.message.from.first_name : 'дорогой незнакомец'}!`))
+botJobs.help((ctx) => ctx.reply(commands))
+botJobs.command('info', async (ctx) => {
 	try {
-		await ctx.replyWithHTML('<b>Информация</b>', Markup.inlineKeyboard(
+		await ctx.replyWithHTML('<b>Информация по сайту</b>', Markup.inlineKeyboard(
 			[
 				[Markup.button.callback('Читать', 'btn_follow')]
 			]
@@ -25,11 +25,14 @@ bot.command('info', async (ctx) => {
 	}
 })
 
-bot.command('jobs', async (ctx) => {
+botJobs.command('chats', async (ctx) => {
 	try {
-		await ctx.replyWithHTML('<b>Обновления вакансий</b>', Markup.inlineKeyboard(
+		await ctx.replyWithHTML('<b>Похоже вы заинтересованы данной разработкой, выберите чат для дальнейшего продолжения. Чат общий - информирует о добавлении и удалении всех вакансий/курсов/кандидатов. Чат с вакансиями информирует о вакансиях, чат с курсами о курсах, чат с кандидатами о кандидатах соответственно. 👋</b>', Markup.inlineKeyboard(
 			[
-				[Markup.button.callback('Подписаться', 'btn_follow')]
+				[Markup.button.url('Общий', 't.me/+rEzMP3bmUS84Nzgy')],
+				[Markup.button.url('Вакансии', 't.me/+IlT14GqWwxAyNzgy')],
+				[Markup.button.url('Курсы', 't.me/+FddajcyAKmkxZWM6')],
+				[Markup.button.url('Кандидаты', 't.me/+1j3NL7yL3jtkMzRi')],
 			]
 		))
 	} catch (e) {
@@ -38,7 +41,7 @@ bot.command('jobs', async (ctx) => {
 })
 
 function addActionBot(name, src, text) {
-	bot.action(name, async (ctx) => {
+	botJobs.action(name, async (ctx) => {
 		try {
 			await ctx.answerCbQuery()
 			if (src !== false) {
@@ -56,7 +59,7 @@ function addActionBot(name, src, text) {
 }
 
 addActionBot('btn_follow', './img/logo.jpg', text)
-bot.launch()
+botJobs.launch()
 
 const createJob = async (req, res) => {
 	const { position, company } = req.body
@@ -69,15 +72,15 @@ const createJob = async (req, res) => {
 	res.status(StatusCodes.CREATED).json({ job })
 
 	const formatData = `	
-		Вышла новая вакансия:
-		ID: ${job.id}
+		Вышла новая вакансия:👇
 		Компания: ${job.company},
 		Должность: ${job.position},
 		Статус: ${job.status},
 		Местонахождение: ${job.jobLocation}
 		Занятость: ${job.jobType}
 `
-	bot.telegram.sendMessage(-1001767776100, `${formatData}`);
+	botJobs.telegram.sendMessage(process.env.CHAT_JOBS_ID, `${formatData}`);
+	botJobs.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
 }
 
 
@@ -224,15 +227,15 @@ const deleteJob = async (req, res) => {
 	res.status(StatusCodes.OK).json({ msg: 'Успешно! Вакансия удалена' })
 
 	const formatData = `	
-		Удалена следующая вакансия:
-		ID: ${job.id}
+		Удалена следующая вакансия:👇
 		Компания: ${job.company},
 		Должность: ${job.position},
 		Статус: ${job.status},
 		Местонахождение: ${job.jobLocation}
 		Занятость: ${job.jobType}
 `
-	bot.telegram.sendMessage(1953336962, `${formatData}`);
+	botJobs.telegram.sendMessage(process.env.CHAT_JOBS_ID, `${formatData}`);
+	botJobs.telegram.sendMessage(process.env.CHAT_ALL_ID, `${formatData}`);
 }
 
 const showStats = async (req, res) => {

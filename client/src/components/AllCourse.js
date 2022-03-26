@@ -2,17 +2,17 @@ import moment from 'moment'
 import { FaLocationArrow, FaBriefcase, FaCalendarAlt } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { useAppContext } from '../context/appContext'
-import Wrapper from '../assets/wrappers/Job'
+import Wrapper from '../assets/wrappers/Course'
 import JobInfo from './JobInfo'
 
-const AllJob = ({
+const AllCourse = ({
 	_id,
 	position,
 	company,
-	jobLocation,
-	jobType,
+	courseLocation,
+	courseType,
 	createdAt,
-	status,
+	duration,
 }) => {
 	const { showStats } = useAppContext()
 
@@ -29,10 +29,10 @@ const AllJob = ({
 			</header>
 			<div className='content'>
 				<div className='content-center'>
-					<JobInfo icon={<FaLocationArrow />} text={jobLocation} />
+					<JobInfo icon={<FaLocationArrow />} text={courseLocation} />
 					<JobInfo icon={<FaCalendarAlt />} text={date} />
-					<JobInfo icon={<FaBriefcase />} text={jobType} />
-					<div className={`status ${status}`}>{status}</div>
+					<JobInfo icon={<FaBriefcase />} text={courseType} />
+					<div className={`duration ${duration}`}>{duration}</div>
 				</div>
 				<footer>
 					<div className='actions'>
@@ -50,4 +50,4 @@ const AllJob = ({
 	)
 }
 
-export default AllJob
+export default AllCourse

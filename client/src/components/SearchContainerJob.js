@@ -29,7 +29,7 @@ const SearchContainerJob = () => {
 	return (
 		<Wrapper>
 			<form className='form'>
-				<h4> Форма поиска </h4>
+				<h4> Вакансии </h4>
 				{/* позиционирование строки поиска */}
 				<div className='form-center'>
 					{/* строка поиска */}
@@ -52,7 +52,7 @@ const SearchContainerJob = () => {
 					</FormRowSelect>
 					{/* выбор поиска по типу */}
 					<FormRowSelect
-						labelText='Тип'
+						labelText='Отрасль'
 						name='searchType'
 						value={searchType}
 						handleChange={handleSearch}

@@ -3,18 +3,18 @@ import { FaLocationArrow, FaBriefcase, FaCalendarAlt } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { useAppContext } from '../context/appContext'
 import Wrapper from '../assets/wrappers/Job'
-import JobInfo from './JobInfo'
+import CourseInfo from './CourseInfo'
 
-const AllJob = ({
+const Course = ({
 	_id,
 	position,
 	company,
-	jobLocation,
-	jobType,
+	courseLocation,
+	courseType,
 	createdAt,
-	status,
+	duration,
 }) => {
-	const { showStats } = useAppContext()
+	const { setEditCourse, deleteCourse } = useAppContext()
 
 	let date = moment(createdAt)
 	date = date.format('MMM Do, YYYY')
@@ -29,20 +29,27 @@ const AllJob = ({
 			</header>
 			<div className='content'>
 				<div className='content-center'>
-					<JobInfo icon={<FaLocationArrow />} text={jobLocation} />
-					<JobInfo icon={<FaCalendarAlt />} text={date} />
-					<JobInfo icon={<FaBriefcase />} text={jobType} />
-					<div className={`status ${status}`}>{status}</div>
+					<CourseInfo icon={<FaLocationArrow />} text={courseLocation} />
+					<CourseInfo icon={<FaCalendarAlt />} text={date} />
+					<CourseInfo icon={<FaBriefcase />} text={courseType} />
+					<div className={`duration ${duration}`}>{duration}</div>
 				</div>
 				<footer>
 					<div className='actions'>
 						<Link
-							to='/stats'
+							to='/add-course'
 							className='btn edit-btn'
-							onClick={() => showStats()}
+							onClick={() => setEditCourse(_id)}
 						>
-							<span>Статистика</span>
+							Изменить
 						</Link>
+						<button
+							type='button'
+							className='btn delete-btn'
+							onClick={() => deleteCourse(_id)}
+						>
+							Удалить
+						</button>
 					</div>
 				</footer>
 			</div>
@@ -50,4 +57,4 @@ const AllJob = ({
 	)
 }
 
-export default AllJob
+export default Course

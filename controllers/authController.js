@@ -1,6 +1,19 @@
 import User from "../models/User.js"
 import { StatusCodes } from "http-status-codes"
 import { BadRequestError, NotFoundError, UnAuthenticatedError } from '../errors/index.js'
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport(
+	{
+		service: 'gmail',
+		auth: {
+			user: 'jurusski@gmail.com',
+			pass: 'Maxim201920'
+		}
+	}
+);
 
 
 const register = async (req, res) => {
@@ -19,6 +32,22 @@ const register = async (req, res) => {
 	res.status(StatusCodes.CREATED).json({
 		user: { email: user.email, lastName: user.lastName, location: user.location, name: user.name },
 		token, location: user.location
+	})
+
+	//отправка приветствия на почту
+	const mailOptions = {
+		from: 'jurusski@gmail.com',
+		to: user.email,
+		subject: 'Jobify!',
+		text: `Приветствую вас, ${user.name} ${user.lastName}. Вы успешно прошли регистрацию на сайте Jobify. Удачной работы!`
+	}
+
+	transporter.sendMail(mailOptions, function (error, info) {
+		if (error) {
+			console.log(error)
+		} else {
+			console.log('email sent' + info.response)
+		}
 	})
 }
 
@@ -43,6 +72,7 @@ const login = async (req, res) => {
 	user.password = undefined
 
 	res.status(StatusCodes.OK).json({ user, token, location: user.location })
+
 }
 
 const updateUser = async (req, res) => {
@@ -62,6 +92,22 @@ const updateUser = async (req, res) => {
 	const token = user.createJWT()
 
 	res.status(StatusCodes.OK).json({ user, token, location: user.location })
+
+	//отправка
+	const mailOptions = {
+		from: 'jurusski@gmail.com',
+		to: user.email,
+		subject: 'Jobify!',
+		text: `Приветствую вас, ${name} ${lastName}! Вы успешно изменили свой профиль.`
+	}
+
+	transporter.sendMail(mailOptions, function (error, info) {
+		if (error) {
+			console.log(error)
+		} else {
+			console.log('email sent' + info.response)
+		}
+	})
 }
 
 export { register, login, updateUser }

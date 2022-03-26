@@ -36,7 +36,7 @@ const JobsContainer = () => {
 	}
 
 	return <Wrapper>
-		<h5>{totalJobs} Ваканси{jobs.length > 1 && 'я'} найдено</h5>
+		<h5>Вакансий: {totalJobs} </h5>
 		<div className='jobs'>
 			{jobs.map((job) => {
 				return <Job key={job._id} {...job} />

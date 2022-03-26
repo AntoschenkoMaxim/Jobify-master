@@ -1,5 +1,11 @@
+import { CoursesContainerWithoutUser, SearchContainerCourse } from "../../components"
+
 const AllCourses = () => {
-	return <h1> AllCourses Page </h1>
+	return (<>
+		<SearchContainerCourse />
+		<CoursesContainerWithoutUser />
+	</>
+	)
 }
 
 export default AllCourses

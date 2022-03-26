@@ -35,18 +35,34 @@ import {
 
 	GET_JOBS_BEGIN,
 	GET_JOBS_SUCCESS,
+	GET_CANDIDATES_BEGIN,
+	GET_CANDIDATES_SUCCESS,
+	GET_COURSES_BEGIN,
+	GET_COURSES_SUCCESS,
 
 	SET_EDIT_JOB,
 	DELETE_JOB_BEGIN,
+	DELETE_COURSE_BEGIN,
+	DELETE_CANDIDATE_BEGIN,
 
 	EDIT_JOB_BEGIN,
 	EDIT_JOB_SUCCESS,
 	EDIT_JOB_ERROR,
+	EDIT_COURSE_BEGIN,
+	EDIT_COURSE_SUCCESS,
+	EDIT_COURSE_ERROR,
+	EDIT_CANDIDATE_BEGIN,
+	EDIT_CANDIDATE_SUCCESS,
+	EDIT_CANDIDATE_ERROR,
 
 	SHOW_STATS_BEGIN,
 	SHOW_STATS_SUCCESS,
 	CLEAR_FILTERS,
-	CHANGE_PAGE
+	CHANGE_PAGE,
+	CHANGE_PAGE_CANDIDATE,
+	CHANGE_PAGE_COURSE,
+	SET_EDIT_COURSE,
+	SET_EDIT_CANDIDATE,
 
 } from './actions'
 
@@ -72,12 +88,12 @@ const initialState = {
 	jobLocation: userLocation || '',
 	candidateLocation: userLocation || '',
 	courseLocation: userLocation || '',
-	jobTypeOptions: ['все время', 'пол ставки', 'удаленная', 'интерн'],
-	jobType: 'все время',
-	candidateTypeOptions: ['Постоянная', 'Неполная', 'удаленная', 'интерн'],
-	candidateType: 'Постоянная',
-	courseTypeOptions: ['Постоянная', 'Неполная', 'удаленная', 'интерн'],
-	courseType: 'Удаленная',
+	jobTypeOptions: ['Промышленность', 'Строительство', 'Сельское хозяйство', 'Образование', 'Наука', 'Соцобеспечение', 'Продажи', 'IT', 'Финансы', 'Органы госуправления', 'Здравохранение', 'Соцобеспечение'],
+	jobType: 'IT',
+	candidateTypeOptions: ['Промышленность', 'Строительство', 'Сельское хозяйство', 'Образование', 'Наука', 'Соцобеспечение', 'Продажи', 'IT', 'Финансы', 'Органы госуправления', 'Здравохранение', 'Соцобеспечение'],
+	candidateType: 'IT',
+	courseTypeOptions: ['Промышленность', 'Строительство', 'Сельское хозяйство', 'Образование', 'Наука', 'Соцобеспечение', 'Продажи', 'IT', 'Финансы', 'Органы госуправления', 'Здравохранение', 'Соцобеспечение'],
+	courseType: 'IT',
 
 	experienceOptions: ['отсутствует', 'от 1 до 3', '3 и более'],
 	experience: 'отсутствует',
@@ -89,18 +105,25 @@ const initialState = {
 	search: '',
 	searchStatus: 'все',
 	searchType: 'все',
+	searchDuration: 'все',
+	searchExperience: 'все',
 	sort: 'новые',
 	sortOptions: ['новые', 'старые', 'a-z', 'z-a'],
 
 	jobs: [],
 	totalJobs: 0,
-	numOfPagesJobs: 1,
-	pageJobs: 1,
+	numOfPages: 1,
+	page: 1,
 
 	candidates: [],
 	totalCandidates: 0,
 	numOfPagesCandidates: 1,
 	pageCandidates: 1,
+
+	courses: [],
+	totalCourses: 0,
+	numOfPagesCourses: 1,
+	pageCourses: 1,
 
 	stats: {},
 	monthlyApplications: []
@@ -116,6 +139,8 @@ const AppProvider = ({ children }) => {
 	const authFetch = axios.create({
 		baseURL: '/api/v1',
 	})
+
+
 	//request
 
 	authFetch.interceptors.request.use((config) => {
@@ -323,6 +348,64 @@ const AppProvider = ({ children }) => {
 		clearAlert()
 	}
 
+	const getCandidates = async () => {
+
+		const { pageCandidates, search, searchExperience, searchType, sort } = state
+		let url = `/candidates?page=${pageCandidates}&experience=${searchExperience}&candidateType=${searchType}&sort=${sort}`
+		//фильтруем по статусу, типу, сортировке по дате и от а до я
+
+		if (search) {
+			url = url + `&search=${search}`
+		}
+
+		dispatch({ type: GET_CANDIDATES_BEGIN })
+		try {
+			const { data } = await authFetch(url)
+			const { candidates, totalCandidates, numOfPagesCandidates } = data
+			dispatch({
+				type: GET_CANDIDATES_SUCCESS,
+				payload: {
+					candidates,
+					totalCandidates,
+					numOfPagesCandidates
+				},
+			})
+		} catch (error) {
+			console.log(error.response)
+			// logoutUser()
+		}
+		clearAlert()
+	}
+
+	const getCourses = async () => {
+
+		const { pageCourses, search, searchDuration, searchType, sort } = state
+		let url = `/courses?page=${pageCourses}&duration=${searchDuration}&courseType=${searchType}&sort=${sort}`
+		//фильтруем по статусу, типу, сортировке по дате и от а до я
+
+		if (search) {
+			url = url + `&search=${search}`
+		}
+
+		dispatch({ type: GET_COURSES_BEGIN })
+		try {
+			const { data } = await authFetch(url)
+			const { courses, totalCourses, numOfPagesCourses } = data
+			dispatch({
+				type: GET_COURSES_SUCCESS,
+				payload: {
+					courses,
+					totalCourses,
+					numOfPagesCourses
+				},
+			})
+		} catch (error) {
+			console.log(error.response)
+			// logoutUser()
+		}
+		clearAlert()
+	}
+
 	const getAllJobs = async () => {
 
 		const { page, search, searchStatus, searchType, sort } = state
@@ -352,10 +435,173 @@ const AppProvider = ({ children }) => {
 		clearAlert()
 	}
 
+	const getAllJobsLanding = async () => {
+
+		const { page, search, searchStatus, searchType, sort } = state
+		let url = `/auth/landing/jobs?page=${page}&status=${searchStatus}&jobType=${searchType}&sort=${sort}`
+		//фильтруем по статусу, типу, сортировке по дате и от а до я
+
+		if (search) {
+			url = url + `&search=${search}`
+		}
+
+		dispatch({ type: GET_JOBS_BEGIN })
+		try {
+			const { data } = await authFetch(url)
+			const { jobs, totalJobs, numOfPages } = data
+			dispatch({
+				type: GET_JOBS_SUCCESS,
+				payload: {
+					jobs,
+					totalJobs,
+					numOfPages
+				},
+			})
+		} catch (error) {
+			console.log(error.response)
+		}
+		clearAlert()
+	}
+
+	const getAllCourses = async () => {
+
+		const { pageCourses, search, searchDuration, searchType, sort } = state
+		let url = `/courses/courses?page=${pageCourses}&duration=${searchDuration}&courseType=${searchType}&sort=${sort}`
+		//фильтруем по статусу, типу, сортировке по дате и от а до я
+
+		if (search) {
+			url = url + `&search=${search}`
+		}
+
+		dispatch({ type: GET_COURSES_BEGIN })
+		try {
+			const { data } = await authFetch(url)
+			const { courses, totalCourses, numOfPagesCourses } = data
+			dispatch({
+				type: GET_COURSES_SUCCESS,
+				payload: {
+					courses,
+					totalCourses,
+					numOfPagesCourses
+				},
+			})
+		} catch (error) {
+			console.log(error.response)
+			// logoutUser()
+		}
+		clearAlert()
+	}
+
+	const getAllCoursesLanding = async () => {
+
+		const { pageCourses, search, searchDuration, searchType, sort } = state
+		let url = `/auth/landing/courses?page=${pageCourses}&duration=${searchDuration}&courseType=${searchType}&sort=${sort}`
+		//фильтруем по статусу, типу, сортировке по дате и от а до я
+
+		if (search) {
+			url = url + `&search=${search}`
+		}
+
+		dispatch({ type: GET_COURSES_BEGIN })
+		try {
+			const { data } = await authFetch(url)
+			const { courses, totalCourses, numOfPagesCourses } = data
+			dispatch({
+				type: GET_COURSES_SUCCESS,
+				payload: {
+					courses,
+					totalCourses,
+					numOfPagesCourses
+				},
+			})
+		} catch (error) {
+			console.log(error.response)
+			// logoutUser()
+		}
+		clearAlert()
+	}
+
+
+	const getAllCandidates = async () => {
+
+		const { pageCandidates, search, searchExperience, searchType, sort } = state
+		let url = `/candidates/candidates?page=${pageCandidates}&experience=${searchExperience}&candidateType=${searchType}&sort=${sort}`
+		//фильтруем по статусу, типу, сортировке по дате и от а до я
+
+		if (search) {
+			url = url + `&search=${search}`
+		}
+
+		dispatch({ type: GET_CANDIDATES_BEGIN })
+		try {
+			const { data } = await authFetch(url)
+			const { candidates, totalCandidates, numOfPagesCandidates } = data
+			dispatch({
+				type: GET_CANDIDATES_SUCCESS,
+				payload: {
+					candidates,
+					totalCandidates,
+					numOfPagesCandidates
+				},
+			})
+		} catch (error) {
+			console.log(error.response)
+			// logoutUser()
+		}
+		clearAlert()
+	}
+
+
+	const getAllCandidatesLanding = async () => {
+
+		const { pageCandidates, search, searchExperience, searchType, sort } = state
+		let url = `/auth/landing/candidates?page=${pageCandidates}&experience=${searchExperience}&candidateType=${searchType}&sort=${sort}`
+		//фильтруем по статусу, типу, сортировке по дате и от а до я
+
+		if (search) {
+			url = url + `&search=${search}`
+		}
+
+		dispatch({ type: GET_CANDIDATES_BEGIN })
+		try {
+			const { data } = await authFetch(url)
+			const { candidates, totalCandidates, numOfPagesCandidates } = data
+			dispatch({
+				type: GET_CANDIDATES_SUCCESS,
+				payload: {
+					candidates,
+					totalCandidates,
+					numOfPagesCandidates
+				},
+			})
+		} catch (error) {
+			console.log(error.response)
+			// logoutUser()
+		}
+		clearAlert()
+	}
+
 	const setEditJob = (id) => {
 		dispatch({
 			type:
 				SET_EDIT_JOB,
+			payload: { id }
+		})
+	}
+
+
+	const setEditCourse = (id) => {
+		dispatch({
+			type:
+				SET_EDIT_COURSE,
+			payload: { id }
+		})
+	}
+
+	const setEditCandidate = (id) => {
+		dispatch({
+			type:
+				SET_EDIT_CANDIDATE,
 			payload: { id }
 		})
 	}
@@ -386,11 +632,83 @@ const AppProvider = ({ children }) => {
 		clearAlert()
 	}
 
+	const editCourse = async () => {
+		dispatch({ type: EDIT_COURSE_BEGIN })
+		try {
+			const { company, position, courseLocation, courseType, duration } = state
+
+			await authFetch.patch(`/courses/${state.editCourseId}`, {
+				company,
+				position,
+				courseLocation,
+				courseType,
+				duration
+			})
+			dispatch({
+				type: EDIT_COURSE_SUCCESS,
+			})
+			dispatch({ type: CLEAR_VALUES })
+		} catch (error) {
+			if (error.response === 401) return
+			dispatch({
+				type: EDIT_COURSE_ERROR,
+				payload: { msg: error.response.data.msg },
+			})
+		}
+		clearAlert()
+	}
+
+	const editCandidate = async () => {
+		dispatch({ type: EDIT_CANDIDATE_BEGIN })
+		try {
+			const { name, position, candidateLocation, candidateType, experience } = state
+
+			await authFetch.patch(`/candidates/${state.editCandidateId}`, {
+				name,
+				position,
+				candidateLocation,
+				candidateType,
+				experience
+			})
+			dispatch({
+				type: EDIT_CANDIDATE_SUCCESS,
+			})
+			dispatch({ type: CLEAR_VALUES })
+		} catch (error) {
+			if (error.response === 401) return
+			dispatch({
+				type: EDIT_CANDIDATE_ERROR,
+				payload: { msg: error.response.data.msg },
+			})
+		}
+		clearAlert()
+	}
+
 	const deleteJob = async (jobId) => {
 		dispatch({ type: DELETE_JOB_BEGIN })
 		try {
 			await authFetch.delete(`/jobs/${jobId}`)
 			getJobs()
+		} catch (error) {
+			logoutUser()
+		}
+	}
+
+	const deleteCourse = async (courseId) => {
+		dispatch({ type: DELETE_COURSE_BEGIN })
+		try {
+			await authFetch.delete(`/courses/${courseId}`)
+			getCourses()
+		} catch (error) {
+			logoutUser()
+		}
+	}
+
+	const deleteCandidate = async (candidateId) => {
+		dispatch({ type: DELETE_CANDIDATE_BEGIN })
+		try {
+			await authFetch.delete(`/candidates/${candidateId}`)
+			getCandidates()
 		} catch (error) {
 			logoutUser()
 		}
@@ -421,6 +739,14 @@ const AppProvider = ({ children }) => {
 		dispatch({ type: CHANGE_PAGE, payload: { page } })
 	}
 
+	const changePageCandidate = (pageCandidates) => {
+		dispatch({ type: CHANGE_PAGE_CANDIDATE, payload: { pageCandidates } })
+	}
+
+	const changePageCourse = (pageCourses) => {
+		dispatch({ type: CHANGE_PAGE_COURSE, payload: { pageCourses } })
+	}
+
 	return <AppContext.Provider
 		value={{
 			...state,
@@ -435,13 +761,28 @@ const AppProvider = ({ children }) => {
 			createCandidate,
 			createCourse,
 			getJobs,
+			getCourses,
+			getCandidates,
 			getAllJobs,
+			getAllCandidates,
+			getAllCourses,
+			getAllJobsLanding,
+			getAllCoursesLanding,
+			getAllCandidatesLanding,
 			setEditJob,
+			setEditCourse,
+			setEditCandidate,
 			deleteJob,
+			deleteCourse,
+			deleteCandidate,
 			editJob,
+			editCourse,
+			editCandidate,
 			showStats,
 			clearFilters,
-			changePage
+			changePage,
+			changePageCandidate,
+			changePageCourse
 		}}>
 		{children}
 	</AppContext.Provider>

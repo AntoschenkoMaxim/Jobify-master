@@ -16,6 +16,8 @@ import {
 	UPDATE_USER_ERROR,
 
 	HANDLE_CHANGE,
+	HANDLE_CHANGE_CANDIDATE,
+	HANDLE_CHANGE_COURSE,
 	CLEAR_VALUES,
 
 	CREATE_JOB_BEGIN,
@@ -30,18 +32,34 @@ import {
 
 	GET_JOBS_BEGIN,
 	GET_JOBS_SUCCESS,
+	GET_CANDIDATES_BEGIN,
+	GET_CANDIDATES_SUCCESS,
+	GET_COURSES_BEGIN,
+	GET_COURSES_SUCCESS,
 
 	SET_EDIT_JOB,
+	SET_EDIT_CANDIDATE,
+	SET_EDIT_COURSE,
 	DELETE_JOB_BEGIN,
+	DELETE_CANDIDATE_BEGIN,
+	DELETE_COURSE_BEGIN,
 
 	EDIT_JOB_BEGIN,
 	EDIT_JOB_SUCCESS,
 	EDIT_JOB_ERROR,
+	EDIT_COURSE_BEGIN,
+	EDIT_COURSE_SUCCESS,
+	EDIT_COURSE_ERROR,
+	EDIT_CANDIDATE_BEGIN,
+	EDIT_CANDIDATE_SUCCESS,
+	EDIT_CANDIDATE_ERROR,
 
 	SHOW_STATS_BEGIN,
 	SHOW_STATS_SUCCESS,
 	CLEAR_FILTERS,
-	CHANGE_PAGE
+	CHANGE_PAGE,
+	CHANGE_PAGE_CANDIDATE,
+	CHANGE_PAGE_COURSE,
 
 } from "./actions"
 
@@ -147,9 +165,9 @@ const reducer = (state, action) => {
 			jobLocation: state.userLocation,
 			candidateLocation: state.userLocation,
 			courseLocation: state.userLocation,
-			jobType: 'все время',
-			candidateType: 'Постоянная',
-			courseType: 'Удаленная',
+			jobType: 'IT',
+			candidateType: 'IT',
+			courseType: 'IT',
 			experience: 'отсутствует',
 			duration: '3 месяца',
 			status: 'declined',
@@ -259,6 +277,42 @@ const reducer = (state, action) => {
 		}
 	}
 
+	if (action.type === GET_CANDIDATES_BEGIN) {
+		return {
+			...state,
+			isLoading: true,
+			showAlert: false
+		}
+	}
+
+	if (action.type === GET_CANDIDATES_SUCCESS) {
+		return {
+			...state,
+			isLoading: false,
+			candidates: action.payload.candidates,
+			totalCandidates: action.payload.totalCandidates,
+			numOfPagesCandidates: action.payload.numOfPagesCandidates
+		}
+	}
+
+	if (action.type === GET_COURSES_BEGIN) {
+		return {
+			...state,
+			isLoading: true,
+			showAlert: false
+		}
+	}
+
+	if (action.type === GET_COURSES_SUCCESS) {
+		return {
+			...state,
+			isLoading: false,
+			courses: action.payload.courses,
+			totalCourses: action.payload.totalCourses,
+			numOfPagesCourses: action.payload.numOfPagesCourses
+		}
+	}
+
 	if (action.type === SET_EDIT_JOB) {
 		const job = state.jobs.find((job) => job._id === action.payload.id)
 		const { _id, position, company, jobLocation, jobType, status } = job
@@ -274,7 +328,51 @@ const reducer = (state, action) => {
 		}
 	}
 
+	if (action.type === SET_EDIT_CANDIDATE) {
+		const candidate = state.candidates.find((candidate) => candidate._id === action.payload.id)
+		const { _id, name, position, candidateLocation, candidateType, experience } = candidate
+		return {
+			...state,
+			isEditing: true,
+			editCandidateId: _id,
+			name,
+			position,
+			candidateLocation,
+			candidateType,
+			experience,
+		}
+	}
+
+	if (action.type === SET_EDIT_COURSE) {
+		const course = state.courses.find((course) => course._id === action.payload.id)
+		const { _id, position, company, courseLocation, courseType, duration } = course
+		return {
+			...state,
+			isEditing: true,
+			editCourseId: _id,
+			position,
+			company,
+			courseLocation,
+			courseType,
+			duration,
+		}
+	}
+
 	if (action.type === DELETE_JOB_BEGIN) {
+		return {
+			...state,
+			isLoading: true,
+		}
+	}
+
+	if (action.type === DELETE_CANDIDATE_BEGIN) {
+		return {
+			...state,
+			isLoading: true,
+		}
+	}
+
+	if (action.type === DELETE_COURSE_BEGIN) {
 		return {
 			...state,
 			isLoading: true,
@@ -308,6 +406,61 @@ const reducer = (state, action) => {
 		}
 	}
 
+	if (action.type === EDIT_COURSE_BEGIN) {
+		return {
+			...state,
+			isLoading: true,
+		}
+	}
+
+	if (action.type === EDIT_COURSE_SUCCESS) {
+		return {
+			...state,
+			isLoading: false,
+			showAlert: true,
+			alertType: 'success',
+			alertText: 'Курс обновлен!'
+		}
+	}
+
+	if (action.type === EDIT_COURSE_ERROR) {
+		return {
+			...state,
+			isLoading: false,
+			showAlert: true,
+			alertType: 'danger',
+			alertText: action.payload.msg,
+		}
+	}
+
+	if (action.type === EDIT_CANDIDATE_BEGIN) {
+		return {
+			...state,
+			isLoading: true,
+		}
+	}
+
+	if (action.type === EDIT_CANDIDATE_SUCCESS) {
+		return {
+			...state,
+			isLoading: false,
+			showAlert: true,
+			alertType: 'success',
+			alertText: 'Кандидат обновлен!'
+		}
+	}
+
+	if (action.type === EDIT_CANDIDATE_ERROR) {
+		return {
+			...state,
+			isLoading: false,
+			showAlert: true,
+			alertType: 'danger',
+			alertText: action.payload.msg,
+		}
+	}
+
+
 	if (action.type === SHOW_STATS_BEGIN) {
 		return {
 			...state,
@@ -331,6 +484,8 @@ const reducer = (state, action) => {
 			search: '',
 			searchStatus: 'все',
 			searchType: 'все',
+			searchDuration: 'все',
+			searchExperience: 'все',
 			sort: 'новые',
 		}
 	}
@@ -347,6 +502,21 @@ const reducer = (state, action) => {
 			...state,
 			page: 1,
 			[action.payload.name]: action.payload.value
+		}
+	}
+
+	if (action.type === CHANGE_PAGE_CANDIDATE) {
+		return {
+			...state,
+			pageCandidates: action.payload.pageCandidates,
+		}
+	}
+
+
+	if (action.type === CHANGE_PAGE_COURSE) {
+		return {
+			...state,
+			pageCourses: action.payload.pageCourses,
 		}
 	}
 

@@ -3,11 +3,11 @@ import Loading from './Loading'
 import Wrapper from '../assets/wrappers/JobsContainer'
 import { useAppContext } from '../context/appContext'
 import PageBtnContainer from './PageBtnContainer'
-import AllJob from './AllJob'
+import AllJobLanding from './AllJobLanding'
 
-const JobsContainer = () => {
+const JobsContainerLanding = () => {
 	const {
-		getAllJobs,
+		getAllJobsLanding,
 		jobs,
 		isLoading,
 		page,
@@ -20,7 +20,7 @@ const JobsContainer = () => {
 	} = useAppContext()
 
 	useEffect(() => {
-		getAllJobs()
+		getAllJobsLanding()
 	}, [page, search, searchStatus, searchType, sort])
 
 	if (isLoading) {
@@ -39,7 +39,7 @@ const JobsContainer = () => {
 		<h5>Вакансий: {totalJobs}</h5>
 		<div className='jobs'>
 			{jobs.map((job) => {
-				return <AllJob key={job._id} {...job} />
+				return <AllJobLanding key={job._id} {...job} />
 			})}
 		</div>
 		{numOfPages > 1 && <PageBtnContainer />}
@@ -47,4 +47,4 @@ const JobsContainer = () => {
 	</Wrapper>
 }
 
-export default JobsContainer
+export default JobsContainerLanding

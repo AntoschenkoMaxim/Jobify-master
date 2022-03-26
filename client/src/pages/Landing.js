@@ -2,8 +2,10 @@ import main from '../assets/images/main-alternative.svg'
 import Wrapper from '../assets/wrappers/LandingPage'
 import { Logo } from '../components'
 import { Link } from 'react-router-dom'
+import { AllJobsLanding, AllCoursesLanding, AllCandidatesLanding } from './dashboard'
 
 const Landing = () => {
+
 	return (
 		<Wrapper>
 			<nav>
@@ -15,17 +17,33 @@ const Landing = () => {
 					<h1>
 						job <span>tracking</span> app
 					</h1>
-					<p>I'm baby photo booth ethical hell of mixtape synth ramps.
-						Pok pok ramps meh craft beer flannel, godard post-ironic
-						lo-fi gastropub retro prism synth occupy blue bottle hoodie.
-						Enamel pin cold-pressed ethical four dollar toast lo-fi,
-						hoodie 90's kombucha actually street art kitsch migas cred.
+					<p>Данный сайт разработан для пользователей, заинтересованных в выборе вакансий для работы,
+						поиске сотрудников, а также повышении своей квалификации. Для более удобного использования
+						приложения и использования всего функционала перейдите к телеграмм-боту:
+						<br></br><a href='https://web.telegram.org/k/#5288942718' rel="noreferrer" target='_blank'>Перейти</a>
 					</p>
 					{/* Кнопка-ссылка, которая изменяет путь URL к другой странице */}
 					<Link to="/register" className='btn btn-hero'>Войти</Link>
 				</div>
 				<img src={main} alt='search job' className='img main-img' />
+			</div>
 
+			<div className='container'>
+				<div>
+					<AllJobsLanding />
+				</div>
+			</div>
+
+			<div className='container'>
+				<div >
+					<AllCoursesLanding />
+				</div>
+			</div>
+
+			<div className='container '>
+				<div >
+					<AllCandidatesLanding />
+				</div>
 			</div>
 		</Wrapper>
 	)
