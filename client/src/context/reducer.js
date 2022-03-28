@@ -168,7 +168,7 @@ const reducer = (state, action) => {
 			courseType: 'IT',
 			experience: 'отсутствует',
 			duration: '3 месяца',
-			status: 'declined',
+			status: 'курсы',
 		}
 		return {
 			...state,

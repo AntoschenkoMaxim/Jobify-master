@@ -39,7 +39,7 @@ const register = async (req, res) => {
 		from: 'jurusski@gmail.com',
 		to: user.email,
 		subject: 'Jobify!',
-		text: `Приветствую вас, ${user.name} ${user.lastName}. Вы успешно прошли регистрацию на сайте Jobify. Удачной работы!`
+		text: `Приветствую вас, ${user.name}. Вы успешно прошли регистрацию на сайте Jobify. Удачной работы!`
 	}
 
 	transporter.sendMail(mailOptions, function (error, info) {

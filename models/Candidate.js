@@ -13,7 +13,7 @@ const CandidateSchema = new mongoose.Schema({
 	},
 	experience: {
 		type: String,
-		enum: ['отсутствует', 'от 1 до 3', '3 и более'],
+		enum: ['отсутствует', '1-3 года', '3 года +'],
 		default: 'отсутствует'
 	},
 	candidateType: {

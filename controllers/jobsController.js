@@ -255,9 +255,10 @@ const showStats = async (req, res) => {
 
 	// задаем дефолтное значение, если не добавят работу
 	const defaultStats = {
-		pending: stats.pending || 0,
-		interview: stats.interview || 0,
-		declined: stats.declined || 0,
+		стажировка: stats.стажировка || 0,
+		собеседование: stats.собеседование || 0,
+		курсы: stats.курсы || 0,
+
 	}
 
 	let monthlyApplications = await Job.aggregate([

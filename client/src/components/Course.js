@@ -2,7 +2,7 @@ import moment from 'moment'
 import { FaLocationArrow, FaBriefcase, FaCalendarAlt } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { useAppContext } from '../context/appContext'
-import Wrapper from '../assets/wrappers/Job'
+import Wrapper from '../assets/wrappers/Course'
 import CourseInfo from './CourseInfo'
 
 const Course = ({

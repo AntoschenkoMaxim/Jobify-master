@@ -26,7 +26,7 @@ const createCandidate = async (req, res) => {
 		Имя: ${candidate.name},
 		Должность: ${candidate.position},
 		Опыт работы: ${candidate.experience},
-		Занятость: ${candidate.candidateType},
+		Отрасль: ${candidate.candidateType},
 		Местонахождение: ${candidate.candidateLocation}
 `
 	await botCandidates.telegram.sendMessage(process.env.CHAT_CANDIDATES_ID, `${formatData}`);

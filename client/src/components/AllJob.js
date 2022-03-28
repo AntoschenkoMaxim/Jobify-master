@@ -32,7 +32,7 @@ const AllJob = ({
 					<JobInfo icon={<FaLocationArrow />} text={jobLocation} />
 					<JobInfo icon={<FaCalendarAlt />} text={date} />
 					<JobInfo icon={<FaBriefcase />} text={jobType} />
-					<div className={`status ${status}`}>{status}</div>
+					<div className='status job'>{status}</div>
 				</div>
 				<footer>
 					<div className='actions'>

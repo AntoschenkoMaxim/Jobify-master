@@ -41,15 +41,7 @@ const Wrapper = styled.article`
       letter-spacing: var(--letterSpacing);
     }
   }
-  .pending {
-    background: #fcefc7;
-    color: #e9b949;
-  }
-  .interview {
-    background: #e0e8f9;
-    color: #647acb;
-  }
-  .declined {
+  .job {
     color: #d66a6a;
     background: #ffeeee;
   }
@@ -76,7 +68,7 @@ const Wrapper = styled.article`
     text-transform: capitalize;
     letter-spacing: var(--letterSpacing);
     text-align: center;
-    width: 120px;
+    width: 140px;
     height: 30px;
   }
   footer {

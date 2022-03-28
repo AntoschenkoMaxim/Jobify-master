@@ -95,12 +95,12 @@ const initialState = {
 	courseTypeOptions: ['Промышленность', 'Строительство', 'Сельское хозяйство', 'Образование', 'Наука', 'Соцобеспечение', 'Продажи', 'IT', 'Финансы', 'Органы госуправления', 'Здравохранение', 'Соцобеспечение'],
 	courseType: 'IT',
 
-	experienceOptions: ['отсутствует', 'от 1 до 3', '3 и более'],
+	experienceOptions: ['отсутствует', '1-3 года', '3 года +'],
 	experience: 'отсутствует',
 	durationOptions: ['1 месяц', '2 месяца', '3 месяца', '4-6 месяцев', '6 и более'],
 	duration: '3 месяца',
-	statusOptions: ['interview', 'pending', 'declined'],
-	status: 'declined',
+	statusOptions: ['собеседование', 'стажировка', 'курсы'],
+	status: 'курсы',
 
 	search: '',
 	searchStatus: 'все',

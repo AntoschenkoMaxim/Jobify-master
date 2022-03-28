@@ -7,22 +7,22 @@ const StatsContainer = () => {
 	const { stats } = useAppContext()
 	const defaultStats = [
 		{
-			title: 'Рассматриваемые',
-			count: stats.pending || 0,
+			title: 'стажировка',
+			count: stats.стажировка || 0,
 			icon: <FaSuitcaseRolling />,
 			color: '#e9b949',
 			bcg: '#fcefc7',
 		},
 		{
 			title: 'Собеседование',
-			count: stats.interview || 0,
+			count: stats.собеседование || 0,
 			icon: <FaCalendarCheck />,
 			color: '#647acb',
 			bcg: '#e0e8f9',
 		},
 		{
-			title: 'Добавлены',
-			count: stats.declined || 0,
+			title: 'курсы',
+			count: stats.курсы || 0,
 			icon: <FaBug />,
 			color: '#d66a6a',
 			bcg: '#ffeeee',
